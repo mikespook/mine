@@ -1,4 +1,5 @@
 #!/bin/bash
+# get PS1 string
 __mikespook_ps1() {
 	local none='\[\033[00m\]'
 	local g='\[\033[0;32m\]'

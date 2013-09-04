@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Load commons: functions, consts, variables
+base=$HOME/.mikespook
+. $base/lib/common.sh
+
+CMD=$1 ;shift
+
+# Show help
+if [ ! -f `script_name $base/cmd $CMD` ] ; then
+    CMD='help'
+fi
+
+echo "
+mikespook Operation Toolset ( `dist` )
+=========================================
+"
+# call subcommand
+include $base/cmd $CMD $*
+[ $? -eq 0 ] && echo 'DONE!!!'
+exit 0
