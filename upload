@@ -1,0 +1,43 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage: setup.sh [-n host] [-p port] [-u user]"
+    exit 1
+}
+
+while getopts 'n:p:u:' o &>> /dev/null; do
+    case "$o" in
+    n)
+        HOST="$OPTARG";;
+    p)
+        PORT="$OPTARG";;
+    u)
+        U="$OPTARG";;
+    *)
+        usage;;
+    esac
+done
+
+if [ "$HOST" == "" ]; then
+    HOST=localhost
+fi
+
+if [ "$PORT" == "" ]; then
+    PORT=22
+fi
+
+if [ "$U" == "" ]; then
+    U=root
+fi
+
+ROOT_PATH=$(dirname $0)
+# Load commons: functions, consts, variables
+. lib/common.sh
+
+# tar node dir
+f=$(mktemp -u).tar.gz
+tar zcvf $f *
+scp -P $PORT $f $U@$HOST:$f && rm $f
+ssh -p $PORT $U@$HOST "mkdir -p ~/.mikespook && tar zxvf $f -C ~/.mikespook && rm -f $f"
+
+date +'%Y-%m-%d %H:%M:%S'
