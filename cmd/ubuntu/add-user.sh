@@ -22,6 +22,10 @@ if [ "$USER_NAME" == "" ]; then
     usage
 fi
 
+check_root
+
+apt-get -y install php5-cli
+
 if [ "$SSH_KEY" == "" ]; then
 	f=`mktemp -u`
 	wget -q --no-check-certificate -O $f $KEY_URL
@@ -32,8 +36,6 @@ fi
 if [ "$SSH_KEY" == "" ]; then
 	usage
 fi
-
-check_root
 
 __add_user() {
 	local user=$1
