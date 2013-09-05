@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: setup.sh [-n host] [-p port] [-u user]"
+    echo "Usage: setup.sh [-n `cat /etc/hostname`] [-p 22] [-u $USER]"
     exit 1
 }
 
@@ -19,7 +19,7 @@ while getopts 'n:p:u:' o &>> /dev/null; do
 done
 
 if [ "$HOST" == "" ]; then
-    HOST=localhost
+    HOST=`cat /etc/hostname`
 fi
 
 if [ "$PORT" == "" ]; then
@@ -27,7 +27,7 @@ if [ "$PORT" == "" ]; then
 fi
 
 if [ "$U" == "" ]; then
-    U=root
+    U=$USER
 fi
 
 ROOT_PATH=$(dirname $0)

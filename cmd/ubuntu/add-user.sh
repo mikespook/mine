@@ -50,4 +50,4 @@ __add_user() {
 	chmod 600 $home/.ssh/authorized_keys
 }
 
-__add_user $USER_NAME $SSH_KEY
+__add_user "$USER_NAME" "$SSH_KEY"
