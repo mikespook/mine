@@ -19,10 +19,10 @@ usage() {
 The commands are:
 "
     # commands list here
-    for f in $base/`dist`/*.sh; do
+    for f in $BASE/$DIR/`dist`/*.sh; do
         local list="$list$(get_cmd_intro $f .sh)"
     done
-    for f in $base/*.sh; do
+    for f in $BASE/$DIR/*.sh; do
         local list="$list$(get_cmd_intro $f .sh)"
     done
 
@@ -32,10 +32,10 @@ The commands are:
 Use '$cmd help [command]' for more information about a command.
 	"
 }
-if [ -f $base/`dist`/$1.sh ] ; then 
-    . $base/`dist`/$1.sh -h
-elif [ -f $base/$1.sh ] ; then 
-	. $base/$1.sh -h
+if [ -f $BASE/$DIR/`dist`/$1.sh ] ; then 
+    . $BASE/$DIR/`dist`/$1.sh -h
+elif [ -f $BASE/$DIR/$1.sh ] ; then 
+	. $BASE/$DIR/$1.sh -h
 else
     usage
 fi

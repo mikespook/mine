@@ -64,15 +64,15 @@ apt-get -y install vim git liblua5.1-0
 
 # rewrite file limits
 echo "system limits ..."
-cp $base/etc/limits.conf /etc/security/limits.d/mikespook.conf
+cp $BASE/etc/limits.conf /etc/security/limits.d/mikespook.conf
 f=/etc/pam.d/common-session
 sed -i '$i session required pam_limits.so' $f
-cp $base/etc/ulimit.sh /etc/profile.d/
+cp $BASE/etc/ulimit.sh /etc/profile.d/
 pam-auth-update --package --force
 
 # rewrite network params
 echo "network params ..."
-cp $base/etc/sysctl.conf /etc/sysctl.d/60-mikespook.conf
+cp $BASE/etc/sysctl.conf /etc/sysctl.d/60-mikespook.conf
 service procps restart
 
 # ssh

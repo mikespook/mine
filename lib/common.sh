@@ -19,12 +19,15 @@ dist() {
     fi
 }
 
-# usage: include <base> <filename> [params]
+# usage: include <base> <dir> <filename> [params]
 include() {
     local base=$1; shift
+	local dir=$1; shift
     local fn=$1; shift
-    local script=$(script_name $base $fn)
+    local script=$(script_name $base/$dir $fn)
     if [ -f $script ] ; then
+		BASE=$base
+		DIR=$dir
         . $script $*
     fi
 }

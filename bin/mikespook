@@ -16,6 +16,6 @@ mikespook Operation Toolset ( `dist` )
 =========================================
 "
 # call subcommand
-include $base/cmd $CMD $*
+include $base cmd $CMD $*
 [ $? -eq 0 ] && echo 'DONE!!!'
 exit 0
