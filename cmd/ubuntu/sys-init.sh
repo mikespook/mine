@@ -73,7 +73,8 @@ pam-auth-update --package --force
 # rewrite network params
 echo "network params ..."
 cp $BASE/etc/sysctl.conf /etc/sysctl.d/60-mikespook.conf
-service procps restart
+service procps reload || \
+	cat /etc/sysctl.d/*.conf /etc/sysctl.conf | sysctl -p -
 
 # ssh
 dpkg -s openssh-server
