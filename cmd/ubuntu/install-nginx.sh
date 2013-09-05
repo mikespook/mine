@@ -24,3 +24,7 @@ echo "deb-src http://nginx.org/packages/ubuntu/ $dist nginx" >> $f
 
 apt-get -y update
 apt-get -y install nginx
+mkdir -p /etc/nginx/sites-available/
+mkdir -p /etc/nginx/sites-enabled/
+cp -f $BASE/etc/nginx.conf /etc/nginx/nginx.conf
+service nginx reload
