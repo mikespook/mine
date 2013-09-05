@@ -19,7 +19,7 @@ echo "setup web server (nginx) ..."
 wget -q -O - http://nginx.org/keys/nginx_signing.key | apt-key add -
 dist=`lsb_release -cs`
 f=/etc/apt/sources.list.d/nginx.list
-echo "deb http://nginx.org/packages/ubuntu/ $dist nginx" >> $f
+echo "deb http://nginx.org/packages/ubuntu/ $dist nginx" > $f
 echo "deb-src http://nginx.org/packages/ubuntu/ $dist nginx" >> $f
 
 apt-get -y update
