@@ -51,3 +51,4 @@ __add_user() {
 }
 
 __add_user "$USER_NAME" "$SSH_KEY"
+passwd $USER_NAME
