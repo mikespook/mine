@@ -29,7 +29,7 @@ else
     export TIMEZONE='Asia/Shanghai'
 fi
 
-if [ ! -z $LOCALE ] ; then
+if [ -z $LOCALE ] ; then
 	LOCALE=zh_CN
 fi
 
@@ -54,7 +54,7 @@ export LC_IDENTIFICATION=\"$LOCALE.UTF-8\"
 export LC_MEASUREMENT=\"$LOCALE.UTF-8\"
 export LC_TIME=\"$LOCALE.UTF-8\"
 export LC_NAME=\"$LOCALE.UTF-8\"
-export LANG=\"$LOCALE.UTF-8\"" >> /etc/profile.d/locale.sh
+export LANG=\"$LOCALE.UTF-8\"" > /etc/profile.d/locale.sh
 
 # update & install
 echo "update & install ... "
