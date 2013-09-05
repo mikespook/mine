@@ -16,7 +16,7 @@ check_root
 
 echo "setup web server (nginx) ..."  
 # import nginx gpg key
-import_gpg_key http://nginx.org/packages/keys/nginx_signing.key
+wget -q -O - http://nginx.org/keys/nginx_signing.key | apt-key add -
 dist=`lsb_release -cs`
 f=/etc/apt/sources.list.d/nginx.list
 echo "deb http://nginx.org/packages/ubuntu/ $dist nginx" >> $f
