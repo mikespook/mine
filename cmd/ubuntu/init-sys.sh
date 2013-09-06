@@ -38,7 +38,9 @@ check_root
 echo "init system, pleas wait ..."
 
 echo "modify hostname: $HOST_NAME"
-echo $HOST_NAME > /etc/hostname
+f=/etc/hostname
+echo $HOST_NAME > $f
+hostname --file $f
 
 echo "setup common environment ... "
 
