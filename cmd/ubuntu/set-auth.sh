@@ -1,14 +1,17 @@
 #add new user with specified ssh key
 
 usage() {
-    echo "Usage: add-user -n -k -u"
+    echo "Usage: set-auth -n -k -u [-p]"
 	printf "\t-n User name\n"
 	printf "\t-k SSH key string\n"
     printf "\t-u URL of sshkey\n"
+    printf "\t-p Modify password\n"    
     exit 1
 }
 
-while getopts 'n:k:u:' o &>> /dev/null; do
+PASSWD=0
+
+while getopts 'n:k:u:p' o &>> /dev/null; do
     case "$o" in
 	n)
         USER_NAME="$OPTARG";;
@@ -16,6 +19,8 @@ while getopts 'n:k:u:' o &>> /dev/null; do
         SSH_KEY="$OPTARG";;
 	u)
 		KEY_URL="$OPTARG";;
+	p)
+		PASSWD=1;;
     *)
         usage;;
     esac
@@ -40,20 +45,20 @@ if [ "$SSH_KEY" == "" ]; then
 	usage
 fi
 
-__add_user() {
+__set_sshkey() {
 	local user=$1
 	local key=$2
-	local home=	local home=`getent passwd "$user" | cut -d: -f6`
+	local home=`getent passwd "$user" | cut -d: -f6`
 	id $user &>> /dev/null
-	[ $? -eq 0 ] && return 1
-	adduser --quiet --disabled-password --gecos "" $user
-	usermod -a -G sudo $user
-	mkdir $home/.ssh
+	[ $? -ne 0 ] && return 1
+	mkdir -p $home/.ssh
 	echo $key > $home/.ssh/authorized_keys
 	chown -R $user:$user $home/.ssh
 	chmod 700 $home/.ssh
 	chmod 600 $home/.ssh/authorized_keys
 }
 
-__add_user "$USER_NAME" "$SSH_KEY"
-passwd $USER_NAME
+__set_sshkey "$USER_NAME" "$SSH_KEY"
+if [ $? -eq 0 ] || [ $PASSWD -eq 1 ] ;then
+	passwd $USER_NAME
+fi
