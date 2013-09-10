@@ -60,6 +60,6 @@ if [ "$SSH_KEY" != "" ]; then
 	__set_sshkey "$USER_NAME" "$SSH_KEY"
 fi
 
-if [ $? -eq 0 ] || [ $PASSWD -eq 1 ] ;then
+if [ $? -eq 0 ] && [ $PASSWD -eq 1 ] ;then
 	passwd $USER_NAME
 fi
