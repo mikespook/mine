@@ -30,10 +30,12 @@ check_root
 apt-get -y install php5-cli
 
 if [ "$SSH_KEY" == "" ]; then
-	f=`mktemp -u`
-	wget -q --no-check-certificate -O $f $KEY_URL
-	json=`cat $f`
-	SSH_KEY=`php -r "echo json_decode('$json')->key;"`
+	if [ "$KEY_URL" != "" ]; then
+		f=`mktemp -u`
+		wget -q --no-check-certificate -O $f $KEY_URL
+		json=`cat $f`
+		SSH_KEY=`php -r "echo json_decode('$json')->key;"`
+	fi
 fi
 
 if [ "$SSH_KEY" == "" ]; then

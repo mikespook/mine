@@ -35,14 +35,12 @@ check_root
 apt-get -y install php5-cli
 
 if [ "$SSH_KEY" == "" ]; then
-	f=`mktemp -u`
-	wget -q --no-check-certificate -O $f $KEY_URL
-	json=`cat $f`
-	SSH_KEY=`php -r "echo json_decode('$json')->key;"`
-fi
-
-if [ "$SSH_KEY" == "" ]; then
-	usage
+	if [ "$KEY_URL" != "" ]; then
+		f=`mktemp -u`
+		wget -q --no-check-certificate -O $f $KEY_URL
+		json=`cat $f`
+		SSH_KEY=`php -r "echo json_decode('$json')->key;"`
+	fi
 fi
 
 __set_sshkey() {
@@ -58,7 +56,10 @@ __set_sshkey() {
 	chmod 600 $home/.ssh/authorized_keys
 }
 
-__set_sshkey "$USER_NAME" "$SSH_KEY"
+if [ "$SSH_KEY" != "" ]; then
+	__set_sshkey "$USER_NAME" "$SSH_KEY"
+fi
+
 if [ $? -eq 0 ] || [ $PASSWD -eq 1 ] ;then
 	passwd $USER_NAME
 fi
