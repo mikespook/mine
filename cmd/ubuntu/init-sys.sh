@@ -46,7 +46,7 @@ echo "setup common environment ... "
 
 # fix locale
 echo "export LANGUAGE=\"$LOCALE:en\"
-export LC_ALL=\"$LOCALE.UTF-8\"
+export LC_ALL=\"C\"
 export LC_PAPER=\"$LOCALE.UTF-8\"
 export LC_ADDRESS=\"$LOCALE.UTF-8\"
 export LC_MONETARY=\"$LOCALE.UTF-8\"
@@ -56,7 +56,7 @@ export LC_IDENTIFICATION=\"$LOCALE.UTF-8\"
 export LC_MEASUREMENT=\"$LOCALE.UTF-8\"
 export LC_TIME=\"$LOCALE.UTF-8\"
 export LC_NAME=\"$LOCALE.UTF-8\"
-export LANG=\"$LOCALE.UTF-8\"" > /etc/profile.d/locale.sh
+export LANG=\"C\"" > /etc/profile.d/locale.sh
 
 # update & install
 echo "update & install ... "
