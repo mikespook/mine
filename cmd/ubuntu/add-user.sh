@@ -2,8 +2,8 @@
 
 usage() {
     echo "Usage: add-user -n -k -u"
-	printf "\t-n User name\n"
-	printf "\t-k SSH key string\n"
+    printf "\t-n User name\n"
+    printf "\t-k SSH key string\n"
     printf "\t-u URL of sshkey\n"
     exit 1
 }
@@ -45,12 +45,12 @@ fi
 __add_user() {
 	local user=$1
 	local key=$2
-	local home=	local home=`getent passwd "$user" | cut -d: -f6`
 	id $user &>> /dev/null
 	[ $? -eq 0 ] && return 1
 	adduser --quiet --disabled-password --gecos "" $user
-	usermod -a -G sudo $user
-	mkdir $home/.ssh
+	usermod -a -G admin $user
+	local home=	local home=`getent passwd "$user" | cut -d: -f6`
+	mkdir -p $home/.ssh
 	echo $key > $home/.ssh/authorized_keys
 	chown -R $user:$user $home/.ssh
 	chmod 700 $home/.ssh
