@@ -20,5 +20,10 @@ __mikespook_ps1() {
 	fi
 	local u="${uc}${debian_chroot:+($debian_chroot)}\u${none}"
 	local h="${hc}\h${none}:${g}\w${none}"
-	echo "$u@$h\$(__git_ps1 '[${emy}%s${none}]')${uc}${p}${none} "
+	command -v __git_ps1 >/dev/null 2>&1
+	if [ $? -eq 0 ]; then
+		echo "$u@$h\$(__git_ps1 '[${emy}%s${none}]')${uc}${p}${none} "
+	else
+		echo "$u@$h${uc}${p}${none} "
+	fi
 }
