@@ -1,0 +1,141 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          doozerd
+# Required-Start:    $network $remote_fs $local_fs 
+# Required-Stop:     $network $remote_fs $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Stop/start doozerd
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME=doozerd
+DESC=doozerd
+DAEMON=/usr/bin/doozerd
+confdir=/etc/doozerd/enabled
+[ ! -d $confdir ] && echo "Missing config directory: $confdir" && exit
+
+test -x $DAEMON
+if [ $? -eq 1 ]; then
+	echo "Missing binary file: $DAEMON"
+	exit 1
+fi
+
+set -e
+
+. /lib/lsb/init-functions
+
+find_daemon() {
+	pids=`ps -AF|grep doozerd|grep "\-c=$cluster_name"|awk '{print $2}'`
+	n=`echo $pids|wc -w`
+	if [ $n -gt 0 ]; then
+		echo $pids|awk '{print $1}'
+		return 0
+	fi
+	return 1
+}
+
+start_doozerd() {
+	if find_daemon > /dev/null; then
+		echo -n "Already started " && return 1
+	fi
+	for i in $(echo $attach_addr | tr ";" "\n"); do
+		a="$a -a$a"	
+	done
+	$DAEMON $a -b="$boot_uri" -c="$cluster_name" -fill=$fill \
+		-hist=$hist -l="$listen" -pulse=$pulse -timeout=$timeout \
+		-tlscert="$tlscert" -tlskey="$tlskey" -w="$web" &>> $log&
+}
+
+stop_doozerd() {
+	pid=`find_daemon`
+	[ -z "$pid" ] && echo -n "Not running " && return 1
+	kill $pid &> /dev/null
+}
+
+waitstart() {
+	i=0
+	r=1
+	while [ $r -ne 0 ] ; do
+		find_daemon > /dev/null
+		r=$?
+		echo -n .
+		sleep 0.2
+		if [ $i -gt 50 ]; then
+			return 1
+		fi
+		i=$(($i + 1))
+	done
+}
+
+waitstop() {	
+	i=0
+	r=0
+	while [ $r -eq 0 ] ; do
+		find_daemon > /dev/null
+		r=$?
+		echo -n .
+		sleep 0.2
+		if [ $i -gt 50 ]; then
+			return 1
+		fi
+		i=$(($i + 1))
+	done
+}
+
+_start() { 
+	if start_doozerd; then
+		if waitstart; then
+			echo "... OK."
+		else
+			echo "... Waiting too long."
+		fi
+	else
+		echo "... FAILED."
+	fi
+}
+
+_stop() {
+	if stop_doozerd; then
+		if waitstop; then
+			echo "... OK."
+		else
+			echo "... Waiting too long."
+		fi
+	else
+		echo "... FAILED."	
+	fi
+}
+
+case "$1" in
+	start)
+		for config in $confdir/*; do
+			. $config		
+			echo -n "Starting $name: "
+			_start
+		done
+		;;
+	stop)
+		for config in $confdir/*; do
+			. $config		
+			echo -n "Stopping $name: "
+			_stop
+		done
+		;;
+	restart)
+		for config in $confdir/*; do
+			. $config		
+			echo "Restarting $name"
+			echo -n "Stopping: "
+			_stop
+			echo -n "Starting: "	
+			_start
+		done
+		;;
+	*)
+		echo "Usage: $NAME {start|stop|restart}" >&2
+		exit 1
+		;;
+esac
+
+exit 0
