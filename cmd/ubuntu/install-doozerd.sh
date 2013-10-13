@@ -36,12 +36,10 @@ mkdir -p /etc/doozerd/enabled/
 echo $SERVICE_TYPE|grep doozerd > /dev/null
 if [ $? -eq 0 ]; then
 	cp $BASE/etc/doozerd.conf /etc/doozerd/conf.d/doozerd.conf
-	ln -s /etc/doozerd/conf.d/doozerd.conf /etc/doozerd/enabled/20-doozerd.conf
 fi
 echo $SERVICE_TYPE|grep dzns > /dev/null
 if [ $? -eq 0 ]; then
 	cp $BASE/etc/dzns.conf /etc/doozerd/conf.d/dzns.conf
-	ln -s /etc/doozerd/conf.d/dzns.conf /etc/doozerd/enabled/10-dzns.conf
 fi
 
 cp $BASE/etc/init.d_doozerd /etc/init.d/doozerd

@@ -12,7 +12,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 NAME=doozerd
 DESC=doozerd
 DAEMON=/usr/bin/doozerd
-confdir=/etc/doozerd/enabled
+confdir=/etc/doozerd/confs-enabled
 [ ! -d $confdir ] && echo "Missing config directory: $confdir" && exit
 
 test -x $DAEMON
@@ -22,6 +22,14 @@ if [ $? -eq 1 ]; then
 fi
 
 set -e
+
+n=`find $confdir -type l 2>/dev/null|wc -l`
+if [ $n -eq 0 ] ;then
+	echo "None enabled config files."
+	echo "Please enabled config files by:"
+	echo "ln -s $confdir/conf.d/\$config $confdir/confs-enabled/\$num-\$config"
+	exit 1
+fi
 
 . /lib/lsb/init-functions
 
@@ -110,6 +118,8 @@ _stop() {
 case "$1" in
 	start)
 		for config in $confdir/*; do
+			[ ! -L $config ] && continue
+			[ ! -z $2 ] && [[ `basename $config` != *"$2"* ]] && continue
 			. $config		
 			echo -n "Starting $name: "
 			_start
@@ -117,6 +127,8 @@ case "$1" in
 		;;
 	stop)
 		for config in $confdir/*; do
+			[ ! -L $config ] && continue	
+			[ ! -z $2 ] && [[ `basename $config` != *"$2"* ]] && continue
 			. $config		
 			echo -n "Stopping $name: "
 			_stop
@@ -124,6 +136,8 @@ case "$1" in
 		;;
 	restart)
 		for config in $confdir/*; do
+			[ ! -L $config ] && continue
+			[ ! -z $2 ] && [[ `basename $config` != *"$2"* ]] && continue		
 			. $config		
 			echo "Restarting $name"
 			echo -n "Stopping: "
@@ -133,7 +147,7 @@ case "$1" in
 		done
 		;;
 	*)
-		echo "Usage: $NAME {start|stop|restart}" >&2
+		echo "Usage: $NAME {start|stop|restart} [config]" >&2
 		exit 1
 		;;
 esac
