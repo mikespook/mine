@@ -14,7 +14,7 @@ while getopts 'a:' o &>> /dev/null; do
     esac
 done
 
-if [ ! -f $GOROOT/VERSION ]; then
+if [ ! -f $GOROOT/README ]; then
 	echo "Error, go were not installed."
 	echo "Please install it by:"
 	echo "mikespook install-golang"
@@ -22,6 +22,8 @@ if [ ! -f $GOROOT/VERSION ]; then
 fi
 
 check_root
+
+apt-get -y -qq install liblua5.1-0-dev libzookeeper-mt-dev
 
 export CGO_CFLAGS="-I/usr/include/zookeeper"
 export CGO_LDFLAGS="-lzookeeper_mt"

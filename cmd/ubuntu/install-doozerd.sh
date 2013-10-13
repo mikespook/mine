@@ -16,7 +16,7 @@ done
 
 [ -z $SERVICE_TYPE ] && SERVICE_TYPE='doozerd|dzns'
 
-if [ ! -f $GOROOT/VERSION ]; then
+if [ ! -f $GOROOT/README ]; then
 	echo "Error, go were not installed."
 	echo "Please install it by:"
 	echo "mikespook install-golang"
