@@ -33,6 +33,9 @@ fi
 
 . /lib/lsb/init-functions
 
+export DOOZER_RWSECRET=$rw_secret
+export DOOZER_ROSECRET=$ro_secret
+
 find_daemon() {
 	pids=`ps -AF|grep doozerd|grep "\-c=$cluster_name"|awk '{print $2}'`
 	n=`echo $pids|wc -w`
