@@ -2,16 +2,16 @@
 # get PS1 string
 __mikespook_ps1() {
 	local none='\[\033[00m\]'
-	local g='\[\033[0;32m\]'
+	local lg='\[\033[1;32m\]'	
+	local lr='\[\033[1;31m\]'	
 	local c='\[\033[0;36m\]'
 	local emy='\[\033[1;33m\]'
-	local br='\[\033[1;41m\]'
 	local bb='\[\033[1;44m\]'
 
-	local uc=$none
+	local uc=$lg
 	local p='$'
 	if [ $UID -eq "0" ] ; then
-    	uc=$br
+    	uc=$lr
 		p='#'
 	fi
 	hc=$bb
@@ -22,8 +22,8 @@ __mikespook_ps1() {
 	local h="${hc}\h${none}:${g}\w${none}"
 	command -v __git_ps1 >/dev/null 2>&1
 	if [ $? -eq 0 ]; then
-		echo "$u@$h\$(__git_ps1 '[${emy}%s${none}]')${uc}${p}${none} "
+		echo "$u${emy}@${none}$h\$(__git_ps1 '[${emy}%s${none}]')${uc}${p}${none} "
 	else
-		echo "$u@$h${uc}${p}${none} "
+		echo "$u${emy}@${none}$h${uc}${p}${none} "
 	fi
 }
