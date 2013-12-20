@@ -32,7 +32,7 @@ wget -O /tmp/$f http://download.virtualbox.org/virtualbox/4.2.18/$f
 VBoxManage extpack install /tmp/$f
 rm -f /tmp/$f
 
-apt-get -y --force-yes install google-chrome-unstable
+apt-get -y --force-yes install google-chrome-stable
 
 f=/etc/tsocks.conf
 sed -i -e "s/server = 192.168.0.1/server = 127.0.0.1/" $f
