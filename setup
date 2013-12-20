@@ -15,3 +15,5 @@ done
 f=$HOME/.bashrc
 sed -i -e '/##mikespook/d' $f
 echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
+
+ln -sf $HOME/.mikespook/vim/vimrc $HOME/.vimrc

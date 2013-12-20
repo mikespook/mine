@@ -33,9 +33,6 @@ fi
 
 . /lib/lsb/init-functions
 
-export DOOZER_RWSECRET=$rw_secret
-export DOOZER_ROSECRET=$ro_secret
-
 find_daemon() {
 	pids=`ps -AF|grep doozerd|grep "\-c=$cluster_name"|awk '{print $2}'`
 	n=`echo $pids|wc -w`
@@ -124,6 +121,8 @@ case "$1" in
 			[ ! -L $config ] && continue
 			[ ! -z $2 ] && [[ `basename $config` != *"$2"* ]] && continue
 			. $config		
+			export DOOZER_RWSECRET=$rw_secret
+			export DOOZER_ROSECRET=$ro_secret
 			echo -n "Starting $name: "
 			_start
 		done
@@ -133,6 +132,8 @@ case "$1" in
 			[ ! -L $config ] && continue	
 			[ ! -z $2 ] && [[ `basename $config` != *"$2"* ]] && continue
 			. $config		
+			export DOOZER_RWSECRET=$rw_secret
+			export DOOZER_ROSECRET=$ro_secret
 			echo -n "Stopping $name: "
 			_stop
 		done
@@ -142,6 +143,8 @@ case "$1" in
 			[ ! -L $config ] && continue
 			[ ! -z $2 ] && [[ `basename $config` != *"$2"* ]] && continue		
 			. $config		
+			export DOOZER_RWSECRET=$rw_secret
+			export DOOZER_ROSECRET=$ro_secret
 			echo "Restarting $name"
 			echo -n "Stopping: "
 			_stop
