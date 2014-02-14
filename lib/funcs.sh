@@ -1,4 +1,13 @@
 #!/bin/bash
+
+# wrap __git_ps1
+__mikespook_git_ps1() {
+	if [ $PWD != $HOME ] ; then
+		command -v __git_ps1 >/dev/null 2>&1
+		__git_ps1 $1
+	fi
+}
+
 # get PS1 string
 __mikespook_ps1() {
 	local none='\[\033[00m\]'
@@ -20,10 +29,5 @@ __mikespook_ps1() {
 	fi
 	local u="${uc}${debian_chroot:+($debian_chroot)}\u${none}"
 	local h="${hc}\h${none}:${g}\w${none}"
-	command -v __git_ps1 >/dev/null 2>&1
-	if [ $? -eq 0 ]; then
-		echo "$u${emy}@${none}$h\$(__git_ps1 '[${emy}%s${none}]')${uc}${p}${none} "
-	else
-		echo "$u${emy}@${none}$h${uc}${p}${none} "
-	fi
+	echo "$u${emy}@${none}$h\$(__mikespook_git_ps1 '[${emy}%s${none}]')${uc}${p}${none} "
 }
