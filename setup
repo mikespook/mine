@@ -17,3 +17,4 @@ sed -i -e '/##mikespook/d' $f
 echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
 
 ln -sf $HOME/.mikespook/vim/vimrc $HOME/.vimrc
+ln -sf $HOME/.mikespook/git $HOME/.git
