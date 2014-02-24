@@ -2,7 +2,7 @@
 
 # wrap __git_ps1
 __mikespook_git_ps1() {
-	if [ $PWD != $HOME ] ; then
+	if [ "$PWD" != "$HOME" ] ; then
 		command -v __git_ps1 >/dev/null 2>&1
 		__git_ps1 $1
 	fi
