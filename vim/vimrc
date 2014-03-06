@@ -129,18 +129,12 @@ endif
 
 if has("gui_running")
   set guioptions-=T
-  set background=dark
   set t_Co=256
-  set background=dark
-  colorscheme torte
-
-  set nu
-else
-  colorscheme torte
-  set background=dark
-  
-  set nonu
 endif
+
+colorscheme torte
+set background=dark
+set nu
 
 set encoding=utf8
 try
@@ -149,7 +143,7 @@ catch
 endtry
 
 set ffs=unix,dos,mac "Default file types
-
+hi Normal ctermbg=none
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files and backups
@@ -190,7 +184,7 @@ vnoremap <silent> # :call VisualSearch('b')<CR>
 
 " When you press gv you vimgrep after the selected text
 vnoremap <silent> gv :call VisualSearch('gv')<CR>
-map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
+map <leader>g :vimgrep // ./*<left><left><left><left><left><left><left>
 
 
 function! CmdLine(str)
@@ -556,5 +550,3 @@ map <leader>sh :ConqueTermSplit bash<CR>
 " latex
 set grepprg=grep\ -nH\ $*
 let g:tex_flavor='latex'
-
-set number

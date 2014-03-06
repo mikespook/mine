@@ -62,7 +62,7 @@ export LANG=\"C\"" > /etc/profile.d/locale.sh
 echo "update & install ... "
 
 apt-get -y update
-apt-get -y install vim git liblua5.1-0 tmux
+apt-get -y install vim vim-scripts exuberant-ctags git liblua5.1-0 tmux
 
 # rewrite file limits
 echo "system limits ..."
