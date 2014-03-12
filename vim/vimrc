@@ -438,7 +438,10 @@ map <leader>u :TMiniBufExplorer<cr>:TMiniBufExplorer<cr>
 " => Omni complete functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-imap <c-space> <c-x><c-o>
+inoremap <c-space> <c-x><c-o>
+if !has("gui_running")
+    inoremap <C-@> <C-x><C-o>
+endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
