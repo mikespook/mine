@@ -96,4 +96,7 @@ if ./all.bash; then
 fi
 popd > /dev/null
 
+# TODO config VIM support
+# vim-go may be better
+
 echo "Golang was installed in $SERVICE_BASE/golang/go."

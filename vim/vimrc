@@ -274,7 +274,7 @@ endfunc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Map space to / (search) and c-space to ? (backgwards search)
 map <space> /
-map <c-space> ?
+map <M-space> ?
 map <silent> <leader><cr> :noh<cr>
 
 " Smart way to move btw. windows
