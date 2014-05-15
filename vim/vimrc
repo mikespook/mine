@@ -45,6 +45,16 @@
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+set nocompatible              " be iMproved, required
+filetype off                  " required
+let g:go_bin_path = expand("~/bin")
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'fatih/vim-go'
+Plugin 'nerdtree'
+Plugin 'tagbar'
+call vundle#end()            " required
+filetype plugin indent on    " required
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -533,7 +543,7 @@ map <leader>wq :wq<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => taglist
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <silent> <F8> :TlistToggle<CR>
+nnoremap <silent> <F8> :TagbarToggle<CR>
 " 打开文件列表
 nnoremap <silent> <F5> :NERDTreeToggle<CR>
 

@@ -94,3 +94,19 @@ echo "update system datetime ... "
 f=/usr/share/zoneinfo/$TIMEZONE
 cp $f /etc/localtime
 ntpdate ntp.ubuntu.com cn.pool.ntp.org
+
+# setup vim plugin
+mkdir -p $HOME/.vim/autoload $HOME/.vim/bundle
+
+pushd .
+cd $HOME/.vim/autoload/
+wget https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+popd
+
+pushd .
+cd $HOME/.vim/bundle
+git clone https://github.com/scrooloose/nerdtree.git
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+git clone git://github.com/majutsushi/tagbar
+popd
+
