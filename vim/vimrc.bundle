@@ -1,5 +1,4 @@
 Bundle 'gmarik/vundle'
-Bundle 'fatih/vim-go'
 Bundle 'scrooloose/nerdtree'
 Bundle 'python.vim'
 Bundle 'lua.vim'
