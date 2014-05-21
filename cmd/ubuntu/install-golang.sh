@@ -96,11 +96,4 @@ if ./all.bash; then
 fi
 popd > /dev/null
 
-mkdir -p $HOME/.vim/bundle
-pushd .
-cd $HOME/.vim/bundle
-git clone https://github.com/fatih/vim-go.git
-vim -c PluginInstall -c q
-popd
-
 echo "Golang was installed in $SERVICE_BASE/golang/go."

@@ -1,0 +1,12 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+let g:go_bin_path = expand("~/bin")
+set rtp+=~/.vim/bundle/vundle
+call vundle#begin()
+
+if filereadable(expand("~/.mikespook/vim/vimrc.bundle"))
+	source ~/.mikespook/vim/vimrc.bundle
+endif
+
+call vundle#end()            " required
+filetype plugin indent on    " required
