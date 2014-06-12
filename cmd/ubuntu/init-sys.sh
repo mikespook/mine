@@ -1,7 +1,11 @@
 #init system
 
+TIMEZONE='Asia/Shanghai'
+LANG="en"
+LOCALE="en_US"
+
 usage() {
-    echo "Usage: sys-init [-n host-name] [-z timezone=Asia/Shanghai] [-l locale=zh_CN]"
+    echo "Usage: sys-init [-n host-name] [-z timezone=$TIMEZONE] [-l language:locale=$LANG:$LOCALE]"
     exit 1
 }
 
@@ -12,60 +16,51 @@ while getopts 'n:z:l:' o &>> /dev/null; do
     z)
         TIMEZONE="$OPTARG";;
 	l)
-		LOCALE="$OPTARG";;
+		LANG="${OPTARG%:*}"
+		LOCALE="${OPTARG#*:}";;
     *)
         usage;;
     esac
 done
 
-if [ "$HOST_NAME" == "" ]; then
+if [ -z "$HOST_NAME" ]; then
     usage
-fi
-
-f=/usr/share/zoneinfo/$TIMEZONE
-if [ -f $f ] ; then
-    export TIMEZONE
-else
-    export TIMEZONE='Asia/Shanghai'
-fi
-
-if [ -z $LOCALE ] ; then
-	LOCALE=zh_CN
 fi
 
 check_root
 
-echo "init system, pleas wait ..."
+echo "Initializing system ..."
 
-echo "modify hostname: $HOST_NAME"
+echo "Hostname: $HOST_NAME"
 f=/etc/hostname
 echo $HOST_NAME > $f
 hostname --file $f
 
-echo "setup common environment ... "
+echo "Setting up environment ... "
 
 # fix locale
-echo "export LANGUAGE=\"$LOCALE:en\"
-export LC_ALL=\"C\"
-export LC_PAPER=\"$LOCALE.UTF-8\"
-export LC_ADDRESS=\"$LOCALE.UTF-8\"
-export LC_MONETARY=\"$LOCALE.UTF-8\"
-export LC_NUMERIC=\"$LOCALE.UTF-8\"
-export LC_TELEPHONE=\"$LOCALE.UTF-8\"
-export LC_IDENTIFICATION=\"$LOCALE.UTF-8\"
-export LC_MEASUREMENT=\"$LOCALE.UTF-8\"
-export LC_TIME=\"$LOCALE.UTF-8\"
-export LC_NAME=\"$LOCALE.UTF-8\"
-export LANG=\"C\"" > /etc/profile.d/locale.sh
+echo "LANG=C
+LANGUAGE=$LOCALE:$LANG
+LC_CTYPE=\"C\"
+LC_NUMERIC=\"C\"
+LC_TIME=\"C\"
+LC_COLLATE=\"C\"
+LC_MONETARY=\"C\"
+LC_MESSAGES=\"C\"
+LC_PAPER=\"C\"
+LC_NAME=\"C\"
+LC_ADDRESS=\"C\"
+LC_TELEPHONE=\"C\"
+LC_MEASUREMENT=\"C\"
+LC_IDENTIFICATION=\"C\"
+LC_ALL=C" > /etc/profile.d/locale.sh
+
 
 # update & install
-echo "update & install ... "
-
 apt-get -y update
-apt-get -y install git liblua5.1-0 tmux
+apt-get -y install git tmux
 
 # rewrite file limits
-echo "system limits ..."
 cp $BASE/etc/limits.conf /etc/security/limits.d/mikespook.conf
 f=/etc/pam.d/common-session
 sed -i '$i session required pam_limits.so' $f
@@ -73,7 +68,6 @@ cp $BASE/etc/ulimit.sh /etc/profile.d/
 pam-auth-update --package --force
 
 # rewrite network params
-echo "network params ..."
 cp $BASE/etc/sysctl.conf /etc/sysctl.d/60-mikespook.conf
 service procps reload || \
 	cat /etc/sysctl.d/*.conf /etc/sysctl.conf | sysctl -p -
@@ -81,7 +75,7 @@ service procps reload || \
 # ssh
 dpkg -s openssh-server
 if [ $? ]; then
-	echo "sshd settings ..."
+	echo "Setting up SSH server ..."
 	f=/etc/ssh/sshd_config
 	sed -i -e "s/^PermitRootLogin .*/PermitRootLogin no/g" $f
 	sed -i -e "s/^PubkeyAuthentication .*/PubkeyAuthentication yes/g" $f
@@ -90,7 +84,13 @@ if [ $? ]; then
 fi
 
 # update datetime
-echo "update system datetime ... "
+echo "Updating datetime ... "
 f=/usr/share/zoneinfo/$TIMEZONE
-cp $f /etc/localtime
-ntpdate ntp.ubuntu.com cn.pool.ntp.org
+if [ -f $f ] ; then
+    export TIMEZONE
+	cp $f /etc/localtime
+else
+	echo "Time zone $TIMEZONE is not existing."
+fi
+
+ntpdate ntp.ubuntu.com pool.ntp.org

@@ -1,61 +1,51 @@
-#add new user with specified ssh key
+#add new user
+
+USER=mikespook
+PASSWORD=false
 
 usage() {
-    echo "Usage: add-user -n -k -u"
-    printf "\t-n User name\n"
-    printf "\t-k SSH key string\n"
-    printf "\t-u URL of sshkey\n"
-    exit 1
+    echo "Usage: $0 -h [-u $USER] [-p]"
+	echo " -h Host of SSH key"
+	echo " -u User name to be created"
+	echo " -p Initializing password"
+	exit 3
 }
 
-while getopts 'n:k:u:' o &>> /dev/null; do
+while getopts 'h:u:p' o &>> /dev/null; do
     case "$o" in
-	n)
-        USER_NAME="$OPTARG";;
-	k)
-        SSH_KEY="$OPTARG";;
+    h)
+        HOST="$OPTARG";;
 	u)
-		KEY_URL="$OPTARG";;
+		USER="$OPTARG";;
+    p)
+        PASSWORD=true;;
     *)
         usage;;
     esac
 done
 
-if [ "$USER_NAME" == "" ]; then
-    usage
-fi
-
 check_root
 
-apt-get -y install php5-cli
+id $USER &>> /dev/null
+[ $? -eq 0 ] && echo "User $USER already existed." && exit 2
 
-if [ "$SSH_KEY" == "" ]; then
-	if [ "$KEY_URL" != "" ]; then
-		f=`mktemp -u`
-		wget -q --no-check-certificate -O $f $KEY_URL
-		json=`cat $f`
-		SSH_KEY=`php -r "echo json_decode('$json')->key;"`
-	fi
-fi
+echo "Adding user $USER ..."
 
-if [ "$SSH_KEY" == "" ]; then
-	usage
-fi
+adduser --quiet --disabled-password --gecos "" $USER
+egrep -i "^admin" /etc/group
+[ $? -ne 0 ] && addgroup --system admin
+usermod -a -G admin $USER
 
-__add_user() {
-	local user=$1
-	local key=$2
-	id $user &>> /dev/null
-	[ $? -eq 0 ] && return 1
-	adduser --quiet --disabled-password --gecos "" $user
-	usermod -a -G admin $user
-	local home=	local home=`getent passwd "$user" | cut -d: -f6`
+echo "Setting SSH key ..."
+home=`getent passwd "$USER" | cut -d: -f6`
+if [ ! -z "$HOST" ]; then
 	mkdir -p $home/.ssh
-	echo $key > $home/.ssh/authorized_keys
-	chown -R $user:$user $home/.ssh
+	scp $HOST:~/.ssh/authorized_keys $HOME/.ssh/
+	chown -R $USER:$USER $home/.ssh
 	chmod 700 $home/.ssh
 	chmod 600 $home/.ssh/authorized_keys
-}
+fi
 
-__add_user "$USER_NAME" "$SSH_KEY"
-passwd $USER_NAME
+$PASSWORD && passwd $USER
+
+exit 0
