@@ -1,12 +1,21 @@
-MyBash
-======
+Mine
+====
 
-My personal bash configrations
+Personal utilities and configurations.
 
 Setup
 -----
 
+In new machine:
+
 ```
-git clone https://github.com/mikespook/mybash.git $HOME/.mikespook
+wget https://raw.githubusercontent.com/mikespook/mine/master/bootstrap
+./bootstrap
+```
+
+In existing environment:
+
+```
+git clone https://github.com/mikespook/mine.git $HOME/.mikespook
 $HOME/.mikespook/setup.sh
 ```

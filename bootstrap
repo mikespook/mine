@@ -1,0 +1,60 @@
+#!/bin/bash
+
+[ $UID -ne 0 ] && echo "Only root can bootstrap." && exit 1
+
+USER=mikespook
+PASSWORD=false
+
+usage() {
+    echo "Usage: $0 -h [-u $USER] [-p]"
+	echo " -h Host of SSH key"
+	echo " -u User name to be created"
+	echo " -p Initializing password"
+	exit 3
+}
+
+while getopts 'h:u:p' o &>> /dev/null; do
+    case "$o" in
+    h)
+        HOST="$OPTARG";;
+	u)
+		USER="$OPTARG";;
+    p)
+        PASSWORD=true;;
+    *)
+        usage;;
+    esac
+done
+
+id $USER &>> /dev/null
+[ $? -eq 0 ] && echo "User $USER already existed." && exit 2
+adduser --quiet --disabled-password --gecos "" $USER
+egrep -i "^admin" /etc/group
+[ $? -ne 0 ] && addgroup --system admin
+usermod -a -G admin $USER
+
+home=`getent passwd "$USER" | cut -d: -f6`
+if [ ! -z "$HOST" ]; then
+	mkdir -p $home/.ssh
+	scp $HOST:~/.ssh/authorized_keys $HOME/.ssh/
+	chown -R $USER:$USER $home/.ssh
+	chmod 700 $home/.ssh
+	chmod 600 $home/.ssh/authorized_keys
+fi
+
+$PASSWORD && passwd $USER
+
+apt-get update -y
+apt-get dist-upgrade -y
+apt-get install git
+apt-get clean
+
+git clone https://github.com/mikespook/me.git $home/.mikespook
+
+f=$home/.bashrc
+echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
+
+ln -sf $home/.mikespook/vim/vimrc $home/.vimrc
+ln -sf $home/.mikespook/git $home/.git
+
+exit 0
