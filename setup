@@ -13,7 +13,9 @@ while getopts '' o &>> /dev/null; do
 done
 
 f=$HOME/.bashrc
-sed -i -e '/##mikespook/d' $f
+if [ -f $f ]; then
+	sed -i -e '/##mikespook/d' $f
+fi
 echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
 
 ln -sf $HOME/.mikespook/vim/vimrc $HOME/.vimrc
