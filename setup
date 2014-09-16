@@ -18,5 +18,8 @@ if [ -f $f ]; then
 fi
 echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
 
+d=$home/.vim/bundle
+git clone https://github.com/gmarik/Vundle.vim.git $d/vundle
+
 ln -sf $HOME/.mikespook/vim/vimrc $HOME/.vimrc
 ln -sf $HOME/.mikespook/git $HOME/.git
