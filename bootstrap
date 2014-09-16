@@ -49,7 +49,7 @@ apt-get dist-upgrade -y
 apt-get install git
 apt-get clean
 
-git clone https://github.com/mikespook/me.git $home/.mikespook
+git clone https://github.com/mikespook/mine.git $home/.mikespook
 
 f=$home/.bashrc
 echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
