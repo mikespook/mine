@@ -62,13 +62,6 @@ $PASSWORD && passwd $USER
 
 git clone https://github.com/mikespook/mine.git $home/.mikespook
 
-f=$home/.bashrc
-echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
-
-d=$home/.vim/bundle
-git clone https://github.com/gmarik/Vundle.vim.git $d/vundle
-
-ln -sf $home/.mikespook/vim/vimrc $home/.vimrc
-ln -sf $home/.mikespook/git $home/.git
+sudo -u $USER $home/.mikespook/setup
 
 exit 0
