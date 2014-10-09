@@ -6,25 +6,40 @@ USER=mikespook
 PASSWORD=false
 
 usage() {
-    echo "Usage: $0 -h [-u $USER] [-p]"
-	echo " -h Host of SSH key"
-	echo " -u User name to be created"
+    echo "Usage: $0 [-k \$path] [-u \$user] [-p]"
+	echo " -k Path of SSH public key"
+	echo " -u User to be created"
 	echo " -p Initializing password"
-	exit 3
 }
 
-while getopts 'h:u:p' o &>> /dev/null; do
+while getopts 'k:u:p' o &>> /dev/null; do
     case "$o" in
-    h)
-        HOST="$OPTARG";;
+    k)
+        KEY="$OPTARG";;
 	u)
 		USER="$OPTARG";;
     p)
         PASSWORD=true;;
     *)
-        usage;;
+        usage
+		exit 3;;
     esac
 done
+
+usage
+printf "\n\tSSH Pub-key:\t$KEY\n"
+printf "\tUser name:\t$USER\n"
+printf "\tInit passwd:\t$PASSWORD\n\n"
+echo -n "Continue to bootstrap? [y|N]: "
+read answer
+if [ "$answer" != "Y" ] || [ "$answer" != "y" ]; then
+	exit 1
+fi
+
+apt-get update -y
+apt-get dist-upgrade -y
+apt-get install git wget
+apt-get clean
 
 id $USER &>> /dev/null
 [ $? -eq 0 ] && echo "User $USER already existed." && exit 2
@@ -32,22 +47,18 @@ adduser --quiet --disabled-password --gecos "" $USER
 egrep -i "^admin" /etc/group
 [ $? -ne 0 ] && addgroup --system admin
 usermod -a -G admin $USER
+usermod -a -G sudo $USER
 
 home=`getent passwd "$USER" | cut -d: -f6`
-if [ ! -z "$HOST" ]; then
+if [ ! -z "$KEY" ]; then
 	mkdir -p $home/.ssh
-	scp $HOST:~/.ssh/authorized_keys $HOME/.ssh/
+	wget $KEY -O $HOME/.ssh/authorized_keys
 	chown -R $USER:$USER $home/.ssh
 	chmod 700 $home/.ssh
 	chmod 600 $home/.ssh/authorized_keys
 fi
 
 $PASSWORD && passwd $USER
-
-apt-get update -y
-apt-get dist-upgrade -y
-apt-get install git
-apt-get clean
 
 git clone https://github.com/mikespook/mine.git $home/.mikespook
 
