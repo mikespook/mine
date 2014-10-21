@@ -65,6 +65,7 @@ fi
 $password && passwd $user
 
 git clone https://github.com/mikespook/mine.git $home/.mikespook
+chown -R $user:$user $home/.mikespook
 
 sudo -u $user $home/.mikespook/setup
 
