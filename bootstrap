@@ -32,7 +32,7 @@ printf "\tUser name:\t$USER\n"
 printf "\tInit passwd:\t$PASSWORD\n\n"
 echo -n "Continue to bootstrap? [y|N]: "
 read answer
-if [ "$answer" != "Y" ] || [ "$answer" != "y" ]; then
+if [ "$answer" != "Y" ] && [ "$answer" != "y" ]; then
 	exit 1
 fi
 
