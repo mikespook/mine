@@ -15,11 +15,11 @@ usage() {
 while getopts 'k:u:p' o &>> /dev/null; do
     case "$o" in
     k)
-        KEY="$OPTARG";;
+        key="$OPTARG";;
 	u)
-		USER="$OPTARG";;
+		user="$OPTARG";;
     p)
-        PASSWORD=true;;
+        password=true;;
     *)
         usage
 		exit 3;;
@@ -27,9 +27,9 @@ while getopts 'k:u:p' o &>> /dev/null; do
 done
 
 usage
-printf "\n\tSSH Pub-key:\t$KEY\n"
-printf "\tUser name:\t$USER\n"
-printf "\tInit passwd:\t$PASSWORD\n\n"
+printf "\n\tSSH Pub-key:\t$key\n"
+printf "\tUser name:\t$user:\n"
+printf "\tInit passwd:\t$password\n\n"
 echo -n "Continue to bootstrap? [y|N]: "
 read answer
 if [ "$answer" != "Y" ] && [ "$answer" != "y" ]; then
@@ -41,27 +41,31 @@ apt-get dist-upgrade -y
 apt-get install git wget
 apt-get clean
 
-id $USER &>> /dev/null
-[ $? -eq 0 ] && echo "User $USER already existed." && exit 2
-adduser --quiet --disabled-password --gecos "" $USER
+id $user &>> /dev/null
+[ $? -eq 0 ] && echo "User $user already existed." && exit 2
+adduser --quiet --disabled-password --gecos "" $user
 egrep -i "^admin" /etc/group
 [ $? -ne 0 ] && addgroup --system admin
-usermod -a -G admin $USER
-usermod -a -G sudo $USER
+usermod -a -G admin $user
+usermod -a -G sudo $user
 
-home=`getent passwd "$USER" | cut -d: -f6`
-if [ ! -z "$KEY" ]; then
+home=`getent passwd "$user" | cut -d: -f6`
+if [ ! -z "$key" ]; then
 	mkdir -p $home/.ssh
-	wget $KEY -O $HOME/.ssh/authorized_keys
-	chown -R $USER:$USER $home/.ssh
+	if [ -f $key ]; then
+		cp $key $home/.ssh/authorized_keys
+	else
+		wget $key -O $home/.ssh/authorized_keys
+	fi
+	chown -R $user:$user $home/.ssh
 	chmod 700 $home/.ssh
 	chmod 600 $home/.ssh/authorized_keys
 fi
 
-$PASSWORD && passwd $USER
+$password && passwd $user
 
 git clone https://github.com/mikespook/mine.git $home/.mikespook
 
-sudo -u $USER $home/.mikespook/setup
+sudo -u $user $home/.mikespook/setup
 
 exit 0
