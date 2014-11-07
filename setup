@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: setup"
+    echo "Usage: setup [\$home]"
     exit 1
 }
 
@@ -12,14 +12,17 @@ while getopts '' o &>> /dev/null; do
     esac
 done
 
-f=$HOME/.bashrc
+home=$1
+[ -z $1 ] && home=$HOME
+
+f=$home/.bashrc
 if [ -f $f ]; then
 	sed -i -e '/##mikespook/d' $f
 fi
 echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
 
-d=$HOME/.vim/bundle
+d=$home/.vim/bundle
 git clone https://github.com/gmarik/Vundle.vim.git $d/vundle
 
-ln -sf $HOME/.mikespook/vim/vimrc $HOME/.vimrc
-ln -sf $HOME/.mikespook/git $HOME/.git
+ln -sf $home/.mikespook/vim/vimrc $home/.vimrc
+ln -sf $home/.mikespook/git $home/.git
