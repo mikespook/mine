@@ -2,8 +2,8 @@
 
 [ $UID -ne 0 ] && echo "Only root can bootstrap." && exit 1
 
-USER=mikespook
-PASSWORD=false
+user=mikespook
+password=false
 
 usage() {
     echo "Usage: $0 [-k \$path] [-u \$user] [-p]"
@@ -26,7 +26,9 @@ while getopts 'k:u:p' o &>> /dev/null; do
     esac
 done
 
-usage
+id $user &>> /dev/null
+[ $? -eq 0 ] && echo "User $user already existed." && exit 2
+
 printf "\n\tSSH Pub-key:\t$key\n"
 printf "\tUser name:\t$user:\n"
 printf "\tInit passwd:\t$password\n\n"
@@ -41,8 +43,6 @@ apt-get dist-upgrade -y
 apt-get install git wget
 apt-get clean
 
-id $user &>> /dev/null
-[ $? -eq 0 ] && echo "User $user already existed." && exit 2
 adduser --quiet --disabled-password --gecos "" $user
 egrep -i "^admin" /etc/group
 [ $? -ne 0 ] && addgroup --system admin
