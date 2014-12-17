@@ -37,7 +37,9 @@ include() {
 script_name() {
     if [ -f $1/`dist`/$2.sh ] ; then
         echo $1/`dist`/$2.sh
-    else
+	elif [ -f $1/common/$2.sh ]; then
+		echo $1/common/$2.sh
+	else
         echo $1/$2.sh
     fi
 }
