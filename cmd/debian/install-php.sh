@@ -32,5 +32,7 @@ echo 'extension=yaf.so' > /etc/php5/conf.d/yaf.ini
 # mongo
 pecl install mongo
 echo 'extension=mongo.so' > /etc/php5/conf.d/mongo.ini
+
+sed -i -e "s/127.0.0.1:9000/\/var\/run\/php5-fpm.sock/g" /etc/php5/fpm/pool.d/www.conf
 #
 service php5-fpm reload
