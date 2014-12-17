@@ -16,6 +16,7 @@ dist() {
         echo centos
     else
         echo 'FATAL: can not determine OS distribution'
+		return 1
     fi
 }
 

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 # Load commons: functions, consts, variables
 base=$HOME/.mikespook
 . $base/lib/common.sh
