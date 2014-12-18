@@ -20,7 +20,7 @@ fi
 
 if [ $EUID -eq 0 ]; then
 	echo "Installing dependency packages ..."
-    if apt-get install -y gcc libc6-dev mercurial; then
+    if apt-get install -y gcc libc6-dev; then
     	echo "Error, check your network connection!"
     	exit 1
     fi
@@ -82,7 +82,7 @@ echo 'export PATH=$PATH:$GOBIN' >> $config
 pushd . > /dev/null
 cd $SERVICE_BASE/golang
 rm -rf golang
-if hg clone -u release https://code.google.com/p/go; then 
+if git clone https://go.googlesource.com/go; then 
 	echo "Error, check your network connection."
 	exit 1
 fi

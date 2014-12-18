@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 [ $UID -ne 0 ] && echo "Only root can bootstrap." && exit 1
 
