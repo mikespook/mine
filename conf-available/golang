@@ -1,7 +1,5 @@
 #!/bin/bash
 export SERVICE_BASE=$HOME
-export GOBIN=$SERVICE_BASE/bin
 export GOROOT=$SERVICE_BASE/golang/go
 export GOPATH=$SERVICE_BASE/golang/3rdpkg:$SERVICE_BASE/golang/own:$GOROOT
-export GOTOOLDIR=$GOROOT/pkg/tool
-export PATH=$PATH:$GOBIN
+export PATH=$PATH:$GOROOT/bin
