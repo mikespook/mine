@@ -36,21 +36,18 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-BIN=$SERVICE_BASE/bin
+BIN=$SERVICE_BASE/golang/go/bin
 OWN=$SERVICE_BASE/golang/own
 PKG=$SERVICE_BASE/golang/3rdpkg
 
 # init the environment
-mkdir -p $BIN
 mkdir -p $OWN
 mkdir -p $PKG
 # setup env-variables
 export PATH=$PATH:$BIN
 export GOROOT=$SERVICE_BASE/golang/go
-export GOBIN=$BIN
 # put $SERVICE_BASE/go/3rdpkg at the first
 export GOPATH=$PKG:$OWN:$GOROOT
-export GOTOOLDIR=$GOROOT/pkg/tool
 
 if [ $SERVICE_BASE == $HOME ]; then
     config=$SERVICE_BASE/.profile
@@ -67,26 +64,39 @@ sed -i -e "/^$/d" $config
 sed -i -e "s/^export SERVICE_BASE.*//g" $config
 sed -i -e "s/^export PATH=\$PATH:\$GOBIN.*//g" $config
 sed -i -e "s/^export GOROOT.*//g" $config
-sed -i -e "s/^export GOBIN.*//g" $config
 sed -i -e "s/^export GOPATH.*//g" $config
-sed -i -e "s/^export GOTOOLDIR.*//g" $config
 
 echo "" >>$config
 echo "export SERVICE_BASE=$SERVICE_BASE" >> $config
-echo 'export GOBIN=$SERVICE_BASE/bin' >> $config
 echo 'export GOROOT=$SERVICE_BASE/golang/go' >> $config
-echo 'export GOPATH=$SERVICE_BASE/golang/3rdpkg:$SERVICE_BASE/golang/own:$GOROOT' >> $config
-echo 'export GOTOOLDIR=$GOROOT/pkg/tool' >> $config
-echo 'export PATH=$PATH:$GOBIN' >> $config
+echo 'export GOPATH=$SERVICE_BASE/golang/3rdpkg:$GOROOT:$SERVICE_BASE/golang/own' >> $config
+echo 'export PATH=$PATH:$GOROOT/bin' >> $config
+echo 'export GOROOT_BOOTSTRAP=$SERVICE_BASE/golang/go-bootstrap' >> $config
 
 pushd . > /dev/null
 cd $SERVICE_BASE/golang
 rm -rf golang
-if git clone https://go.googlesource.com/go; then 
+if git clone -b 1.4.2 https://go.googlesource.com/go go1.4; then 
 	echo "Error, check your network connection."
 	exit 1
 fi
 popd > /dev/null
+
+ln -s go1.4 go
+
+pushd . > /dev/null
+cd $GOROOT/src/
+if ./all.bash; then 
+	echo "Error, build golang faild."
+	exit 1
+fi
+popd > /dev/null
+
+cp -rf go1.4 go1.5
+unlink go
+ln -s go1.5 go
+ln -s go1.4 go-bootstrap
+export GOROOT_BOOTSTRAP=$SERVICE_BASE/golang/go-bootstrap
 
 pushd . > /dev/null
 cd $GOROOT/src/

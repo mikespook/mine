@@ -1,0 +1,2 @@
+# deb http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu vivid main # disabled on upgrade to vivid
+# deb-src http://ppa.launchpad.net/yannubuntu/boot-repair/ubuntu trusty main

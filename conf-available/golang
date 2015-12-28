@@ -1,5 +1,6 @@
 #!/bin/bash
 export SERVICE_BASE=$HOME
 export GOROOT=$SERVICE_BASE/golang/go
-export GOPATH=$SERVICE_BASE/golang/3rdpkg:$SERVICE_BASE/golang/own:$GOROOT
+export GOROOT_BOOTSTRAP=$SERVICE_BASE/golang/go-bootstrap
+export GOPATH=$SERVICE_BASE/golang/3rdpkg:$GOROOT:$SERVICE_BASE/golang/own
 export PATH=$PATH:$GOROOT/bin
