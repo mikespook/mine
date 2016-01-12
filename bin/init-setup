@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
+set -e
+
+m=`dirname $(pwd)`
 f=$HOME/.bashrc
+
 if [ -f $f ]; then
 	sed -i -e '/##mikespook/d' $f
 fi
-echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
+echo ". $m/etc/bashrc ##mikespook" >> $f
