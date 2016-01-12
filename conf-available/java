@@ -1,0 +1,3 @@
+#!/bin/bash
+export JAVA_HOME=$HOME/Public/java/jdk
+export PATH=$PATH:$JAVA_HOME/bin
