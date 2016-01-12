@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+f=$HOME/.bashrc
+if [ -f $f ]; then
+	sed -i -e '/##mikespook/d' $f
+fi
+echo '. $HOME/.mikespook/bashrc ##mikespook' >> $f
