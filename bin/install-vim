@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+
+sudo apt-get install vim-gtk exuberant-ctags
+
+v=$HOME/.vim/bundle
+m=`dirname $(pwd)`
+rc=$HOME/.vimrc
+
+if [ -d "$v/vundle" ]; then
+	pushd .
+	cd $v/vundle
+	git pull
+	popd
+	vim +PluginUpdate +qall
+else
+	git clone https://github.com/gmarik/Vundle.vim.git $v/vundle
+	ln -sf $m/vim/vimrc $rc
+	vim +PluginInstall +qall
+fi
+
