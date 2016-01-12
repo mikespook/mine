@@ -1,6 +1,10 @@
 #!/bin/bash
 base=$HOME/.mikespook/
 . $base/lib/funcs.sh
-[ "$(ls -A $base/conf-enabled)" ] && . $base/conf-enabled/*
+if [ "$(ls -A $base/conf-enabled)" ]; then
+	for f in $base/conf-enabled/*; do
+		. $f
+	done
+fi
 export PATH=$PATH:$base/bin
 export PS1=$(__mikespook_ps1)
