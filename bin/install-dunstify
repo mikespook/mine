@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+TMP=`mktemp -d`
+pushd .
+cd $TMP
+sudo apt install libdbus-1-dev libxdg-basedir-dev libxss-dev libnotify-dev
+git clone https://github.com/dunst-project/dunst.git
+cd dunst
+make dunstify
+mv dunstify $HOME/bin/
+popd
+rm -rf $TMP

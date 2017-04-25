@@ -9,3 +9,8 @@ if [ -f $f ]; then
 	sed -i -e '/##mikespook/d' $f
 fi
 echo ". $m/etc/bashrc ##mikespook" >> $f
+
+ln -s $m/config/i3 $HOME/.config/i3
+ln -s $m/config/i3status/ $HOME/.config/i3status
+
+
