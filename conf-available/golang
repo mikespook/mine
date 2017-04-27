@@ -2,4 +2,9 @@
 export GOROOT=$HOME/golang/go
 export GOROOT_BOOTSTRAP=$HOME/golang/go-bootstrap
 export GOPATH=$HOME/golang/3rdpkg:$GOROOT:$HOME/golang/own
-export PATH=$PATH:$GOROOT/bin
+_ifs=$IFS
+IFS=':'
+for dir in $GOPATH; do
+	export PATH=$PATH:$dir/bin
+done
+IFS=$_ifs
