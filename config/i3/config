@@ -101,7 +101,7 @@ set $ws6 6:Others
 # switch to workspace
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
+bindsym $mod+3 workspace $ws3, layout tabbed
 bindsym $mod+4 workspace $ws4
 bindsym $mod+5 workspace $ws5
 bindsym $mod+6 workspace $ws6, layout tabbed
@@ -129,6 +129,9 @@ mode "app" {
 	bindsym c exec "google-chrome", mode "default"
 	bindsym f exec "firefox", mode "default"
 	bindsym m exec "mysql-workbench", mode "default"
+# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
 }
 
 bindsym $mod+a mode "app"
@@ -179,7 +182,10 @@ for_window [class="Slack"] move container to workspace $ws6
 
 workspace_auto_back_and_forth yes
 
-exec xrandr --output HDMI-0 --left-of LVDS
+set $hdmi HDMI-1
+set $maindisplay eDP-1
+
+exec xrandr --output $hdmi --left-of $maindisplay
 # Left hand mouse
 exec --no-startup-id xmodmap -e "pointer = 3 2 1"
 # number lock on
@@ -195,9 +201,21 @@ exec i3-sensible-terminal
 exec xpad
 exec clipit
 
-workspace $ws1 output LVDS
-workspace $ws2 output HDMI-0
-workspace $ws3 output HDMI-0
-workspace $ws4 output HDMI-0
-workspace $ws5 output HDMI-0
-workspace $ws6 output LVDS
+workspace $ws1 output $maindisplay
+workspace $ws2 output $hdmi
+workspace $ws3 output $hdmi 
+workspace $ws4 output $hdmi
+workspace $ws5 output $hdmi
+workspace $ws6 output $maindisplay
+
+# Control touchpad with shortcut
+set $touchpad 14
+mode "Touchpad" {
+	bindsym e exec --no-startup-id xinput --enable $touchpad, mode "default"
+	bindsym d exec --no-startup-id xinput --disable $touchpad, mode "default"
+# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+
+bindsym $mod+p mode "Touchpad"
