@@ -10,6 +10,8 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
+set $hdmi HDMI-1
+set $maindisplay eDP-1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -177,13 +179,12 @@ assign [class="Pcmanfm"] → $ws5
 assign [class="libreoffice-"] → $ws5
 
 for_window [class="xpad"] floating enable #, resize set 320 240, move absolute position 20 800
+for_window [class="VirtualBox"] floating enable, resize set 1280 960, move absolute position 20 60
 for_window [title="Google Hangouts"] move container to workspace $ws6
 for_window [class="Slack"] move container to workspace $ws6
+for_window [class="TeamViewer"] floating enable, move container to workspace $ws6
 
 workspace_auto_back_and_forth yes
-
-set $hdmi HDMI-1
-set $maindisplay eDP-1
 
 exec xrandr --output $hdmi --left-of $maindisplay
 # Left hand mouse
@@ -209,7 +210,7 @@ workspace $ws5 output $hdmi
 workspace $ws6 output $maindisplay
 
 # Control touchpad with shortcut
-set $touchpad 14
+set $touchpad "SynPS/2 Synaptics TouchPad"
 mode "Touchpad" {
 	bindsym e exec --no-startup-id xinput --enable $touchpad, mode "default"
 	bindsym d exec --no-startup-id xinput --disable $touchpad, mode "default"
@@ -217,5 +218,8 @@ mode "Touchpad" {
 	bindsym Return mode "default"
 	bindsym Escape mode "default"
 }
-
+exec --no-startup-id xinput --disable $touchpad
 bindsym $mod+p mode "Touchpad"
+
+bindsym Print exec scrot -e 'mv $f ~/Downloads/ && gimp ~/Downloads/$f' --release
+bindsym Ctrl+Print exec scrot -u -e 'mv $f ~/Downloads/ && gimp ~/Downloads/$f' --release
