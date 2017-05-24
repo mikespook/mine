@@ -1,0 +1,10 @@
+#/usr/bin/env bash
+hdmi=HDMI-1
+maindisplay=eDP-1
+if xrandr | grep -q "$hdmi connected"; then
+	xrandr --output $hdmi --primary --left-of $maindisplay
+	echo "Primary Display: $hdmi"
+else
+	xrandr --output $maindisplay --primary
+	echo "Primary Display: $maindisplay"
+fi

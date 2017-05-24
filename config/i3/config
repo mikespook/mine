@@ -122,7 +122,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+e exec "pcmanfm" focus
+bindsym $mod+e exec "xfe" focus
 
 bindsym $mod+Shift+s exec gksu 'shutdown -h now'
 
@@ -175,7 +175,7 @@ bar {
 assign [class="Google-chrome"] → $ws3
 assign [class="Firefox"] → $ws3
 assign [class="Gimp"] → $ws4
-assign [class="Pcmanfm"] → $ws5
+assign [class="xfe"] → $ws5
 assign [class="libreoffice-"] → $ws5
 
 for_window [class="xpad"] floating enable #, resize set 320 240, move absolute position 20 800
@@ -186,7 +186,7 @@ for_window [class="TeamViewer"] floating enable, move container to workspace $ws
 
 workspace_auto_back_and_forth yes
 
-exec xrandr --output $hdmi --left-of $maindisplay
+exec ~/.mikespook/bin/display
 # Left hand mouse
 exec --no-startup-id xmodmap -e "pointer = 3 2 1"
 # number lock on
@@ -194,10 +194,9 @@ exec --no-startup-id numlockx on
 # Network tray
 exec --no-startup-id nm-applet
 # Volume tray
-exec --no-startup-id volumeicon
-# exec --no-startup-id start-pulseaudio-x11
+exec --no-startup-id pnmixer
 # First working window
-exec i3-sensible-terminal
+exec gigolo
 # Notes
 exec xpad
 exec clipit
