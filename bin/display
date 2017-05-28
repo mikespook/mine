@@ -1,6 +1,6 @@
 #/usr/bin/env bash
-hdmi=HDMI-1
-maindisplay=eDP-1
+hdmi=`xrandr |grep HDMI|awk '{print $1}'`
+maindisplay=`xrandr |grep eDP|awk '{print $1}'`
 if xrandr | grep -q "$hdmi connected"; then
 	xrandr --output $hdmi --primary --left-of $maindisplay
 	echo "Primary Display: $hdmi"

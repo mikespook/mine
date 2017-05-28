@@ -1,0 +1,4 @@
+#/usr/bin/env bash
+DIR=$HOME/Pictures/wallpapers
+IMG=`ls $DIR | shuf -n 1`
+display -window root $DIR/$IMG

@@ -2,7 +2,9 @@
 
 set -e
 
-sudo apt-get install vim-gtk exuberant-ctags
+if [! -z $DISPLAY ]; then
+	sudo apt-get install vim-gtk exuberant-ctags
+fi
 
 v=$HOME/.vim/bundle
 m=`dirname $(pwd)`
