@@ -122,21 +122,30 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+e exec "xfe" focus
+bindsym $mod+e exec "pcmanfm" focus
 
-bindsym $mod+Shift+s exec gksu 'shutdown -h now'
+bindsym $mod+Shift+s exec terminator -e 'sudo shutdown -h now'
 
 # running application with shortcut
-mode "app" {
+mode "App" {
 	bindsym c exec "google-chrome", mode "default"
 	bindsym f exec "firefox", mode "default"
 	bindsym m exec "mysql-workbench", mode "default"
+	bindsym p exec "system-config-printer", mode "default"
+	bindsym s exec "simple-scan", mode "default"
+	bindsym v exec "virtualbox", mode "default"
 # back to normal: Enter or Escape
 	bindsym Return mode "default"
 	bindsym Escape mode "default"
 }
 
-bindsym $mod+a mode "app"
+bindsym $mod+a mode "App"
+
+mode "Game" {
+	bindsym s exec "steam", mode "default"
+}
+bindsym $mod+g mode "Game"
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
 # These bindings trigger as soon as you enter the resize mode
@@ -174,15 +183,16 @@ bar {
 
 assign [class="Google-chrome"] → $ws3
 assign [class="Firefox"] → $ws3
+assign [class="Tor Browser"] → $ws3
 assign [class="Gimp"] → $ws4
-assign [class="xfe"] → $ws5
+assign [class="pcmanfm"] → $ws5
 assign [class="libreoffice-"] → $ws5
 
 for_window [class="xpad"] floating enable
 for_window [class="VirtualBox"] floating enable, resize set 1280 960, move absolute position 20 60 #, move container to workspace $ws6 
 for_window [title="Google Hangouts"] move container to workspace $ws6
 for_window [class="Slack"] move container to workspace $ws6
-for_window [class="TeamViewer"] floating enable, move container to workspace $ws6
+for_window [class="TeamViewer"] floating enable
 
 workspace_auto_back_and_forth yes
 
@@ -199,9 +209,10 @@ exec pnmixer
 # First working window
 exec gigolo
 # Notes
-exec xpad
+# exec xpad
 exec clipit
 exec i3-sensible-terminal
+exec_always --no-startup-id numlockx on
 
 workspace $ws1 output $maindisplay
 workspace $ws2 output $hdmi
