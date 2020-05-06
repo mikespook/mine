@@ -6,5 +6,5 @@ if [ "$(ls -A $base/conf-enabled)" ]; then
 		. $f
 	done
 fi
-export PATH=$PATH:$base/bin
+export PATH=$PATH:$base/bin:$HOME/.local/bin
 export PS1=$(__mikespook_ps1)
