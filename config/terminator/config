@@ -1,5 +1,5 @@
 [global_config]
-  enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
+  enabled_plugins = InactivityWatch, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   focus = mouse
   inactive_color_offset = 0.75
   scroll_tabbar = True
@@ -24,6 +24,7 @@
     copy_on_selection = True
     cursor_color = "#26ac0c"
     cursor_shape = ibeam
+    font = JetBrains Mono 12
     palette = "#000000:#cc0000:#4e9a06:#c4a000:#3465a4:#75507b:#06989a:#d3d7cf:#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec"
     scrollback_infinite = True
     show_titlebar = False

@@ -18,7 +18,7 @@ set $maindisplay eDP-1-1
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango:DejaVu Sans Mono 9
+font pango:DejaVu Sans Mono 10
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -127,7 +127,7 @@ bindsym $mod+Shift+s exec terminator -e 'sudo shutdown -h now'
 
 # running application with shortcut
 mode "App" {
-	bindsym c exec "my-chrome", mode "default"
+	bindsym c exec "google-chrome", mode "default"
 	bindsym f exec "firefox", mode "default"
 	bindsym m exec "mysql-workbench", mode "default"
 	bindsym p exec "system-config-printer", mode "default"
@@ -143,6 +143,9 @@ bindsym $mod+a mode "App"
 
 mode "Game" {
 	bindsym s exec "steam", mode "default"
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
 }
 bindsym $mod+g mode "Game"
 
@@ -175,13 +178,11 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	#output primary
-	#output HDMI-1-1
-	font pango:DejaVu Sans Mono 9
+	font pango:DejaVu Sans Mono 10
 	position top
 	status_command i3status
 	tray_output primary
-	separator_symbol "$|$"
+	separator_symbol " | "
 }
 
 assign [class="Google-chrome"] → $ws3
@@ -191,30 +192,29 @@ assign [class="Gimp"] → $ws4
 assign [class="pcmanfm"] → $ws5
 assign [class="libreoffice-"] → $ws5
 
-for_window [class="xpad"] floating enable
-# for_window [class="VirtualBox"] floating enable, resize set 1280 960, move absolute position 20 60 #, move container to workspace $ws6 
 for_window [title="Google Hangouts"] move container to workspace $ws6
 for_window [class="Slack"] move container to workspace $ws6
 for_window [class="TeamViewer"] floating enable
 
 workspace_auto_back_and_forth yes
 
-exec --no-startup-id ~/.mikespook/bin/display
+exec --no-startup-id ~/.mikespook/bin/screen-placement
 exec --no-startup-id ~/.mikespook/bin/wallpaper
 # Left hand mouse
 exec --no-startup-id xmodmap -e "pointer = 3 2 1"
-# number lock on
-exec --no-startup-id numlockx on
 # Network tray
 exec nm-applet
 # Volume tray
 exec pnmixer
 # First working window
-exec gigolo
+# exec gigolo
 # Notes
 # exec xpad
 exec clipit
 exec i3-sensible-terminal
+exec flameshot
+exec ibus-daemon -d -x
+# number lock on
 exec_always --no-startup-id numlockx on
 
 workspace $ws1 output $maindisplay
@@ -236,5 +236,5 @@ mode "Touchpad" {
 exec --no-startup-id xinput --disable $touchpad
 bindsym $mod+p mode "Touchpad"
 
-bindsym Print exec scrot -e 'mv $f ~/Downloads/ && gimp ~/Downloads/$f' --release
-bindsym Ctrl+Print exec scrot -u -e 'mv $f ~/Downloads/ && gimp ~/Downloads/$f' --release
+bindsym Print exec flameshot gui
+bindsym Ctrl+Print exec flameshot full
