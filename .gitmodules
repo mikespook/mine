@@ -1,0 +1,6 @@
+[submodule "config/nv-ide"]
+	path = config/nv-ide
+	url = https://github.com/crivotz/nv-ide.git
+[submodule "config/my-nvim-config"]
+	path = config/my-nvim-config
+	url = git@github.com:mikespook/my-nvim-config.git

@@ -31,3 +31,9 @@ __mikespook_ps1() {
 	local h="${hc}\h${none}:${g}\w${none}"
 	echo "$u${emy}@${none}$h\$(__mikespook_git_ps1 '[${emy}%s${none}]')${uc}${p}${none} "
 }
+
+sudol() {
+	cmd=$1
+	shift
+	sudo $(which $cmd) $*
+}

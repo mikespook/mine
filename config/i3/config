@@ -10,8 +10,8 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
-set $hdmi HDMI-1-1
-set $maindisplay eDP-1-1
+set $hdmi HDMI-A-0
+set $maindisplay default
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -128,6 +128,7 @@ bindsym $mod+Shift+s exec terminator -e 'sudo shutdown -h now'
 # running application with shortcut
 mode "App" {
 	bindsym c exec "google-chrome", mode "default"
+	bindsym d exec "dbeaver", mode "default"	
 	bindsym f exec "firefox", mode "default"
 	bindsym m exec "mysql-workbench", mode "default"
 	bindsym p exec "system-config-printer", mode "default"
@@ -186,13 +187,13 @@ bar {
 }
 
 assign [class="Google-chrome"] → $ws3
-assign [class="Firefox"] → $ws3
+# assign [class="Firefox"] → $ws3
+# assign [instance="Navigator"] → $ws3
 assign [class="Tor Browser"] → $ws3
 assign [class="Gimp"] → $ws4
-assign [class="pcmanfm"] → $ws5
 assign [class="libreoffice-"] → $ws5
+assign [class="VirtualBox Machine"] → $ws6
 
-for_window [title="Google Hangouts"] move container to workspace $ws6
 for_window [class="Slack"] move container to workspace $ws6
 for_window [class="TeamViewer"] floating enable
 
@@ -210,10 +211,11 @@ exec pnmixer
 # exec gigolo
 # Notes
 # exec xpad
-exec clipit
+exec parcellite
 exec i3-sensible-terminal
 exec flameshot
 exec ibus-daemon -d -x
+exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 # number lock on
 exec_always --no-startup-id numlockx on
 
