@@ -118,7 +118,7 @@ bindsym $mod+c exec cliphist list | wmenu -l 15 -p clip | cliphist decode | wl-c
 
 bindsym $mod+Shift+s exec terminator -e 'sudo shutdown -h now'
 # re-apply the kanshi display profile
-bindsym $mod+s exec kanshictl reload
+bindsym $mod+s exec sh -c 'pkill -x kanshi; exec kanshi'
 
 # running application with shortcut
 mode "App" {
@@ -172,7 +172,8 @@ bar {
 workspace_auto_back_and_forth yes
 
 # Display layout (see ~/.config/kanshi/config)
-exec kanshi
+# restart on every reload: sway resets unconfigured outputs on reload
+exec_always sh -c 'pkill -x kanshi; exec kanshi'
 exec_always ~/.mikespook/bin/wallpaper
 # Network tray
 exec nm-applet --indicator
