@@ -13,7 +13,6 @@
   split_vert = <Shift><Super>v
 [profiles]
   [[default]]
-    cursor_color = "#aaaaaa"
     font = DejaVuSansMono Nerd Font 15
     show_titlebar = False
     scrollback_lines = 2000
