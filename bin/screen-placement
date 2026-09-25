@@ -1,10 +1,49 @@
-#/usr/bin/env bash
-hdmi=`xrandr |grep HDMI|awk '{print $1}'`
-maindisplay=`xrandr |grep eDP|awk '{print $1}'`
-if xrandr | grep -q "$hdmi connected"; then
-	xrandr --output $hdmi --primary --left-of $maindisplay
-	echo "Primary Display: $hdmi"
-else
-	xrandr --output $maindisplay --primary
-	echo "Primary Display: $maindisplay"
+#!/usr/bin/env bash
+
+xrandr_output=$(xrandr --query)
+maindisplay=$(awk '$1 ~ /^eDP/ && $2 == "connected" { print $1; exit }' <<< "$xrandr_output")
+hdmi=$(awk '$1 ~ /^HDMI/ && $2 == "connected" { print $1; exit }' <<< "$xrandr_output")
+displayport=$(awk '$1 ~ /^(DP|DisplayPort)/ && $2 == "connected" { print $1; exit }' <<< "$xrandr_output")
+
+if [[ -z $maindisplay ]]; then
+	echo "No connected internal display found" >&2
+	exit 1
 fi
+
+external_outputs=()
+while read -r output; do
+	external_outputs+=("$output")
+done < <(awk '$1 ~ /^(HDMI|DP|DisplayPort)/ { print $1 }' <<< "$xrandr_output")
+
+build_off_args() {
+	local selected_output=$1
+	off_args=()
+	for output in "${external_outputs[@]}"; do
+		if [[ $output != "$selected_output" ]]; then
+			off_args+=(--output "$output" --off)
+		fi
+	done
+}
+
+# Check if HDMI is connected
+if [[ -n $hdmi ]]; then
+	build_off_args "$hdmi"
+	xrandr --output "$hdmi" --primary --below "$maindisplay" "${off_args[@]}"
+	echo "Primary Display: $hdmi"
+	exit 0
+fi
+
+# Check if DisplayPort is connected
+if [[ -n $displayport ]]; then
+	build_off_args "$displayport"
+	xrandr --output "$maindisplay" --mode 1920x1080 --pos 0x0 --rotate normal \
+		--output "$displayport" --primary --mode 1920x1080 --pos 1920x0 --rotate normal \
+		"${off_args[@]}"
+	echo "Primary Display: $displayport"
+	exit 0
+fi
+
+# Fallback: only maindisplay is active and primary
+build_off_args ""
+xrandr --output "$maindisplay" --primary "${off_args[@]}"
+echo "Primary Display: $maindisplay"
