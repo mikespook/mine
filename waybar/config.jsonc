@@ -1,0 +1,85 @@
+// waybar config, ported from i3status
+{
+	"layer": "top",
+	"position": "top",
+	"modules-left": ["sway/workspaces", "sway/mode"],
+	"modules-center": [],
+	"modules-right": [
+		"disk",
+		"memory",
+		"temperature",
+		"network#eth",
+		"network#wifi",
+		"battery",
+		"cpu",
+		"clock",
+		"tray"
+	],
+
+	"sway/workspaces": {
+		"disable-scroll": true
+	},
+
+	"disk": {
+		"path": "/",
+		"interval": 60,
+		"format": "{free}"
+	},
+
+	"memory": {
+		"interval": 60,
+		"format": "{used:0.1f} GiB",
+		"states": { "warning": 90 },
+		"format-warning": "MEMORY: {avail:0.1f} GiB"
+	},
+
+	"temperature": {
+		"thermal-zone": 0,
+		"interval": 60,
+		"critical-threshold": 80,
+		"format": "{temperatureC} °C"
+	},
+
+	"network#eth": {
+		"interface": "en*",
+		"interval": 60,
+		"format-ethernet": "E: {ipaddr}",
+		"format-disconnected": "E: down",
+		"format-wifi": "",
+		"tooltip-format": "{ifname}"
+	},
+
+	"network#wifi": {
+		"interface": "wl*",
+		"interval": 60,
+		"format-wifi": "W: {ipaddr} ({signalStrength}% at {essid}, {bandwidthDownBits})",
+		"format-disconnected": "W: down",
+		"format-ethernet": "",
+		"tooltip-format": "{ifname} {frequency} GHz"
+	},
+
+	"battery": {
+		"bat": "BAT0",
+		"interval": 60,
+		"format": "{capacity}% {time}",
+		"format-charging": "CHR {capacity}% {time}",
+		"format-full": "FULL {capacity}%",
+		"format-time": "{H}:{m}",
+		"states": { "warning": 20, "critical": 10 }
+	},
+
+	"cpu": {
+		"interval": 60,
+		"format": "{load}"
+	},
+
+	"clock": {
+		"interval": 60,
+		"format": "{:%a %d %b %H:%M}",
+		"tooltip-format": "<tt>{calendar}</tt>"
+	},
+
+	"tray": {
+		"spacing": 6
+	}
+}

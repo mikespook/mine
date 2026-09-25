@@ -1,0 +1,66 @@
+/* Look close to the old swaybar + i3status */
+* {
+	font-family: "DejaVu Sans Mono", monospace;
+	font-size: 13px;
+	min-height: 0;
+	border: none;
+	border-radius: 0;
+}
+
+window#waybar {
+	background: #000000;
+	color: #ffffff;
+}
+
+#workspaces button {
+	padding: 0 6px;
+	color: #888888;
+	background: #222222;
+	border: 1px solid #333333;
+}
+
+#workspaces button.focused {
+	color: #ffffff;
+	background: #285577;
+	border-color: #4c7899;
+}
+
+#workspaces button.urgent {
+	background: #900000;
+	border-color: #2f343a;
+}
+
+#mode {
+	padding: 0 6px;
+	background: #900000;
+}
+
+/* " | " separators between status blocks, like i3status */
+#disk, #memory, #temperature, #network, #battery, #cpu, #clock {
+	padding: 0 8px;
+	border-left: 1px solid #666666;
+}
+
+#disk {
+	border-left: none;
+}
+
+#network.disconnected,
+#temperature.critical,
+#memory.warning,
+#battery.critical {
+	color: #ff0000;
+}
+
+#battery.warning {
+	color: #ffff00;
+}
+
+#network.wifi,
+#network.ethernet {
+	color: #00ff00;
+}
+
+#tray {
+	padding: 0 6px;
+}
