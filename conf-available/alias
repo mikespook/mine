@@ -1,2 +1,3 @@
 #!/bin/bash
 alias xclip='xclip -selection clipboard'
+alias get_idf='. $HOME/Public/esp/esp-idf/export.sh'
